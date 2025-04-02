@@ -1,52 +1,57 @@
 package com.neoflex.vacation_pay_calculator.dto;
 
 import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public class VacationPayRequest {
-    @Positive(message = "Salary must be positive")
-    private double averageSalary;
+    @NotNull(message = "Average salary must be provided")
+    @Positive(message = "Average salary must be positive")
+    private double salary;
     @Positive(message = "Number of days must be positive")
-    private Integer vacationDaysNumber;
-    private List<LocalDate> vacationDates;
+    private Integer daysNumber;
+    private List<LocalDate> dates;
+    @AssertTrue(message = "Either number of days or dates of vacation must be provided")
+    public boolean isValuesValid() {
+        return daysNumber != null || (dates != null && !dates.isEmpty());
+    }
 
     public VacationPayRequest() {
     }
 
     public VacationPayRequest(double averageSalary, int vacationDaysNumber) {
-        this.averageSalary = averageSalary;
-        this.vacationDaysNumber = vacationDaysNumber;
+        this.salary = averageSalary;
+        this.daysNumber = vacationDaysNumber;
     }
 
-    public double getAverageSalary() {
-        return averageSalary;
+    public double getSalary() {
+        return salary;
     }
 
-    public void setAverageSalary(double averageSalary) {
-        this.averageSalary = averageSalary;
+    public void setSalary(double salary) {
+        this.salary = salary;
     }
 
-    public Integer getVacationDaysNumber() {
-        return vacationDaysNumber;
+    public Integer getDaysNumber() {
+        return daysNumber;
     }
 
-    public void setVacationDaysNumber(Integer vacationDaysNumber) {
-        this.vacationDaysNumber = vacationDaysNumber;
+    public void setDaysNumber(Integer daysNumber) {
+        this.daysNumber = daysNumber;
     }
 
-    public List<LocalDate> getVacationDates() {
-        return vacationDates;
+    public List<LocalDate> getDates() {
+        return dates;
     }
 
-    public void setVacationDates(List<LocalDate> vacationDates) {
-        this.vacationDates = vacationDates;
+    public void setDates(List<LocalDate> dates) {
+        this.dates = dates;
     }
 
-    @AssertTrue(message = "Either vacationDaysNumber or vacationDates must be provided")
-    public boolean isVacationInputValid() {
-        return vacationDaysNumber != null || (vacationDates != null && !vacationDates.isEmpty());
+    public boolean hasDates(){
+        return dates != null;
     }
 }

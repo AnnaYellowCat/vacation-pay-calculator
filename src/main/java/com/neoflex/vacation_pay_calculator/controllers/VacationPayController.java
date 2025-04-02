@@ -17,15 +17,10 @@ public class VacationPayController {
     }
 
     @GetMapping("/calculate")
-    public VacationPayResponse calculate(@Valid @ModelAttribute VacationPayRequest request){
-        double vacationPay;
-        if (request.getVacationDates() != null && !request.getVacationDates().isEmpty()) {
-            vacationPay = vacationPayService.calculateVacationPayWithDates(
-                    request.getAverageSalary(), request.getVacationDates());
-        } else {
-            vacationPay = vacationPayService.calculateVacationPay(
-                    request.getAverageSalary(), request.getVacationDaysNumber());
-        }
+    public VacationPayResponse calculate(@Valid @ModelAttribute VacationPayRequest request) {
+        double vacationPay = request.hasDates()
+                ? vacationPayService.calculateByDates(request.getSalary(), request.getDates())
+                : vacationPayService.calculateByDays(request.getSalary(), request.getDaysNumber());
         return new VacationPayResponse(vacationPay);
     }
 }
