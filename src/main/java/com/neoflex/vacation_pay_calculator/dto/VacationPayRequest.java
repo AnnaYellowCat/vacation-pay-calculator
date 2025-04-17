@@ -55,3 +55,4 @@ public class VacationPayRequest {
         return dates != null;
     }
 }
+
